@@ -15,8 +15,10 @@ namespace System.Net.Tests
 
         public readonly static Uri RemoteGetServer = new Uri("http://" + Host + "/get");
         public readonly static Uri RemotePostServer = new Uri("http://" + Host + "/post");
+        public readonly static Uri RemotePutServer = new Uri("http://" + Host + "/put");
         public readonly static Uri SecureRemoteGetServer = new Uri("https://" + Host + "/get");
         public readonly static Uri SecureRemotePostServer = new Uri("https://" + Host + "/post");
+        public readonly static Uri SecureRemotePutServer = new Uri("https://" + Host + "/put");
 
         public const string RemoteStatusCodeServerFormat = "http://" + Host + "/status/{0}";
         public const string SecureRemoteStatusCodeServerFormat = "https://" + Host + "/status/{0}";

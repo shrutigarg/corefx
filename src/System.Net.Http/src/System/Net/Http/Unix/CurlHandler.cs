@@ -466,6 +466,10 @@ namespace System.Net.Http
             if (state.RequestMessage.Method == HttpMethod.Put)
             {
                 SetCurlOption(requestHandle, CURLoption.CURLOPT_UPLOAD, 1L);
+                if (state.RequestMessage.Content == null)
+                {
+                    SetCurlOption(requestHandle, CURLoption.CURLOPT_INFILESIZE, 0L);
+                }
             }
             else if (state.RequestMessage.Method == HttpMethod.Head)
             {
@@ -477,7 +481,7 @@ namespace System.Net.Http
                 if (state.RequestMessage.Content == null)
                 {
                     SetCurlOption(requestHandle, CURLoption.CURLOPT_POSTFIELDSIZE, 0L);
-                    SetCurlOption(requestHandle, CURLoption.CURLOPT_POSTFIELDS, "");
+                    SetCurlOption(requestHandle, CURLoption.CURLOPT_POSTFIELDS, IntPtr.Zero);
                 }
             }
 
