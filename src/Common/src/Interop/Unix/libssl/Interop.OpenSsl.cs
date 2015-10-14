@@ -95,7 +95,7 @@ internal static partial class Interop
             }
         
             return ((libssl.SSL_state(context) == (int)libssl.SslState.SSL_ST_OK));
-
+            
         }
 
         internal static int Encrypt(SafeSslHandle context, IntPtr buffer, int offset, int count, int bufferCapacity, out libssl.SslErrorCode errorCode)
@@ -184,15 +184,17 @@ internal static partial class Interop
             return libssl.SSL_get_peer_cert_chain(context);
         }
 
-        internal static libssl.SSL_CIPHER GetConnectionInfo(SafeSslHandle context)
+        internal static libssl.SSL_CIPHER GetConnectionInfo(SafeSslHandle sslHandle, out string protocolVersion)
         {
-            IntPtr cipherPtr = libssl.SSL_get_current_cipher(context);
-            var cipher = new libssl.SSL_CIPHER();
+            IntPtr cipherPtr = libssl.SSL_get_current_cipher(sslHandle);
+          var cipher = new libssl.SSL_CIPHER();
             if (IntPtr.Zero != cipherPtr)
             {
                 cipher = Marshal.PtrToStructure<libssl.SSL_CIPHER>(cipherPtr);
             }
 
+            IntPtr versionPtr = libssl.SSL_get_version(sslHandle);
+            protocolVersion = Marshal.PtrToStringAnsi(versionPtr);
             return cipher;
         }
 
@@ -249,7 +251,7 @@ internal static partial class Interop
 
             return method;
         }
-
+        
         private static void Disconnect(SafeSslHandle context)
         {
             int retVal = libssl.SSL_shutdown(context);

@@ -86,11 +86,13 @@ namespace System.Net
 
         public static int QueryContextConnectionInfo(SafeDeleteContext securityContext, out SslConnectionInfo connectionInfo)
         {
+            string protocolVersion;
             connectionInfo = null;
             try
             {
-                Interop.libssl.SSL_CIPHER cipher = Interop.OpenSsl.GetConnectionInfo(securityContext.SslContext);
-                connectionInfo =  new SslConnectionInfo(cipher);
+                Interop.libssl.SSL_CIPHER cipher = Interop.OpenSsl.GetConnectionInfo(securityContext.SslContext, out protocolVersion);
+                connectionInfo =  new SslConnectionInfo(cipher, protocolVersion);
+               
                 return 0;
             }
             catch
@@ -180,7 +182,7 @@ namespace System.Net
                         {
                             inputPtr = new IntPtr(tokenPtr + inputBuffer.offset);
                             done = Interop.OpenSsl.DoSslHandshake(context.SslContext, inputPtr, inputBuffer.size, out outputPtr, out outputSize);
-                        }
+                         }
                     }
                 }
 
